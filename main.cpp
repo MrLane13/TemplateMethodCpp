@@ -4,47 +4,55 @@ using namespace std;
 
 class AbstractClass {
     public:
-    void storeItem() {
-        name();
-        category();
-        storeId();
-        itemNote();
+    // The template. It is exposed as an invokable method to the concrete classes
+    void TemplateMethod() {
+        primitiveOperation1();
+        primitiveOperation2();
+        invariantOperation();
+        hookedOperation();
     }
-    virtual void name() = 0;
-    virtual void category() = 0;
-    void storeId() {
+    // Primitives are instantiated at compile time and must be implemented by the subclasses (ConcreteClassA/B)
+    virtual void primitiveOperation1() = 0;
+    virtual void primitiveOperation2() = 0;
+    // Invariants are defined and will not be implemented by the subclasses (ConcreteClassA/B)
+    void invariantOperation() {
         cout << "Store Location : 555" << endl;
     }
-    virtual void itemNote() {}
+    // Hooks are left uninstantiated. It is left up to the subclasses (ConcreteClassA/B) to implement hooks or not
+    virtual void hookedOperation() {}
 };
 
 class ConcreteClassA : public AbstractClass {
     public:
-    void name() {
-        cout << "Milk" << endl;
+    void primitiveOperation1() {
+        cout << "PO1 A" << endl;
     }
-    void category() {
-        cout << "Dairy" << endl;
+    void primitiveOperation2() {
+        cout << "PO2 A" << endl;
     }
+    // Note no definition for the hoookedOperation here. It is not required.
 };
 
 class ConcreteClassB : public AbstractClass {
     public:
-    void name() {
-        cout << "Celery" << endl;
+    void primitiveOperation1() {
+        cout << "PO1 B" << endl;
     }
-    void category() {
-        cout << "Produce" << endl;
+    void primitiveOperation2() {
+        cout << "PO2 B" << endl;
     }
-    void itemNote() {
-        cout << "Sub category: vegtable" << endl;
+    // Does not need to be defined in a subclass, but we choose to do so here
+    void hookedOperation() {
+        cout << "Hook! B" << endl;
     }
 }
 
 int main() {
+    // Create instances of the concrete classes
     ConcreteClassA ca;
     ConcreteClassB cb;
-    ca.storeItem();
-    cb.storeItem();
+    // Invoke the template method on both concrete classes
+    ca.TemplateMethod();
+    cb.TemplateMethod();
     return 0;
 }
